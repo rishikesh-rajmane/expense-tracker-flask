@@ -1,56 +1,60 @@
-# Expense Tracker Web Application
+# 💰 Expense Tracker — Flask Web Application
 
-A simple and user-friendly Expense Tracker built using **Python, Flask, SQLite, SQLAlchemy, HTML, and Tailwind CSS**. This project helps users record daily expenses, organize them by category, and monitor their spending through a web-based dashboard.
+A web-based expense tracking application built with **Python and Flask** that allows users to register, log in, and manage their personal expenses securely.
 
-## Features
+The project demonstrates Flask web development, database integration, user authentication, password hashing, and user-specific data access.
 
-- **Add Expenses:** Enter an expense description, amount, date, and category.
-- **View Expenses:** Display saved expense records in a table.
-- **Delete Expenses:** Remove expense records when needed.
-- **Expense Summary:** Calculate the total amount spent.
-- **Category Management:** Organize expenses into categories such as Food, Transport, Rent, Utilities, and Health.
-- **Date Filtering:** Filter expenses by a selected date range.
-- **Responsive Dashboard:** A clean, dark-themed interface styled using Tailwind CSS.
+## 🚀 Live Demo
 
-*Note: Some dashboard features may still be under development.*
+**Live Application:** [Expense Tracker on Render](https://expense-tracker-flask.onrender.com/)
 
-## Technologies Used
+> Note: The first request may take some time because Render's free web services can spin down when inactive.
 
-- **Python** — Application logic
-- **Flask** — Web framework and routing
-- **SQLite** — Database for storing expense records
-- **Flask-SQLAlchemy** — Database operations and ORM
-- **HTML5** — Web page structure
-- **Tailwind CSS** — Dashboard styling
-- **Git & GitHub** — Version control and project hosting
+## ✨ Features
 
-## Project Structure
+- **User Registration:** Create a new account with a username and password.
+- **Secure Login:** Authenticate users using hashed passwords.
+- **Session Management:** Manage authenticated sessions using Flask-Login.
+- **Add Expenses:** Record expenses under the logged-in user's account.
+- **View Expenses:** Display expenses belonging to the current user.
+- **Delete Expenses:** Delete your own expenses securely.
+- **User Data Isolation:** Prevent users from viewing or deleting other users' expenses through the application.
+- **Protected Routes:** Require authentication to access protected pages.
+- **Admin Support:** Support for administrator accounts through an `is_admin` field in the user model.
+- **Cloud Deployment:** Deployed on Render and maintained using GitHub.
 
-```text
-expense-tracker-static/
-├── app.py
-├── templates/
-│   ├── index.html
-│   ├── base.html
-│   └── edit.html
-├── instance/
-│   └── expenses.db
-├── venv/
-└── .gitignore
-```
+## 🛠️ Technologies Used
 
-The `instance/` and `venv/` folders are excluded from GitHub using `.gitignore`.
+| Technology | Purpose |
+|---|---|
+| Python | Backend programming |
+| Flask | Web application framework |
+| Flask-SQLAlchemy | Database integration |
+| SQLite | Local and application database |
+| Flask-Login | User authentication and sessions |
+| Werkzeug Security | Password hashing and verification |
+| HTML | Web page structure |
+| Git & GitHub | Version control and source code management |
+| Render | Cloud deployment |
 
-## Getting Started
+## 🔐 Security Implementation
+
+- Passwords are stored as hashes rather than plain text.
+- Flask-Login manages authenticated user sessions.
+- Protected routes require users to log in.
+- Expense queries are filtered by the authenticated user's ID.
+- Expense deletion checks ownership before deleting a record.
+- The Flask secret key can be configured using an environment variable.
+- Logout is handled through a POST request.
+
+## ⚙️ Run the Project Locally
 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR-USERNAME/expense-tracker-flask.git
+git clone https://github.com/rishikesh-rajmane/expense-tracker-flask.git
 cd expense-tracker-flask
 ```
-
-Replace `YOUR-USERNAME` with your GitHub username.
 
 ### 2. Create a virtual environment
 
@@ -58,59 +62,88 @@ Replace `YOUR-USERNAME` with your GitHub username.
 python -m venv venv
 ```
 
-### 3. Activate the virtual environment
-
-**Windows PowerShell:**
+Activate it on Windows PowerShell:
 
 ```powershell
 .\venv\Scripts\Activate.ps1
 ```
 
-If PowerShell blocks activation, you can use the virtual environment's Python executable directly.
-
-### 4. Install dependencies
+### 3. Install dependencies
 
 ```bash
-pip install flask flask-sqlalchemy
+pip install -r requirements.txt
 ```
 
-### 5. Run the application
+### 4. Configure the secret key
+
+Set a development secret key in PowerShell:
+
+```powershell
+$env:SECRET_KEY = "your-local-development-secret"
+```
+
+Use a strong, randomly generated secret key for any shared or production deployment. Keep secret values out of GitHub.
+
+### 5. Start the application
 
 ```bash
 python app.py
 ```
 
-### 6. Open the application
+Open the local URL configured by the application in your browser.
 
-Visit the following address in your browser:
+## 🗄️ Database Information
+
+The application uses SQLite through Flask-SQLAlchemy.
+
+- The local database is stored separately from the GitHub repository.
+- The database file is excluded from version control to avoid publishing personal expense records.
+- On Render's free web service, local SQLite files use temporary storage and may be lost after restarts or redeployments.
+- A persistent database solution is recommended before using the application for important real-world financial records.
+
+## 📁 Project Structure
 
 ```text
-http://127.0.0.1:4848
+expense-tracker-flask/
+├── app.py
+├── requirements.txt
+├── .gitignore
+└── templates/
+    ├── index.html
+    ├── login.html
+    └── register.html
 ```
 
-The SQLite database is created automatically when the application starts.
+The SQLite database and local virtual environment are not included in the repository.
 
-## Learning Objectives
+## 🎯 Learning Outcomes
 
-This project was developed to gain practical experience with:
+Through this project, I have gained practical experience with:
 
-- Building web applications using Flask.
-- Performing database operations with SQLite and SQLAlchemy.
-- Handling and validating form submissions.
-- Displaying database records dynamically using Jinja templates.
-- Calculating totals from stored data.
-- Using Git and GitHub to manage project versions.
+- Building a web application using Flask.
+- Connecting Python applications to a database.
+- Implementing registration and login functionality.
+- Hashing and verifying passwords.
+- Managing user sessions and protected routes.
+- Implementing user-specific data access.
+- Using Git and GitHub for source control.
+- Deploying a Flask application to Render.
+- Managing application configuration through environment variables.
 
-## Future Improvements
+## 🔮 Future Improvements
 
-- Complete and test date and category filtering.
-- Add category-wise expense charts.
-- Add monthly spending summaries.
-- Implement CSV export.
-- Add expense editing functionality.
-- Deploy the application online.
+- Integrate a persistent production database.
+- Add expense categories and monthly summaries.
+- Implement reporting and data visualization.
+- Improve form validation and error handling.
+- Add automated tests for authentication and expense access.
 
-## Author
+## 👨‍💻 Author
 
-Developed as a hands-on Python and database project to strengthen practical development skills.
+**Rishikesh Rajmane**
 
+[GitHub Repository](https://github.com/rishikesh-rajmane/expense-tracker-flask)
+
+---
+
+*Built as a hands-on project to strengthen my Python, Flask, database, and backend development skills.*
