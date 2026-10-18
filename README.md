@@ -6,7 +6,7 @@ The project demonstrates Flask web development, database integration, user authe
 
 ## 🚀 Live Demo
 
-**Live Application:** [Expense Tracker on Render](https://expense-tracker-flask-02a1.onrender.com/))
+**Live Application:** [Expense Tracker on Render](https://expense-tracker-flask-02a1.onrender.com/)
 
 > Note: The first request may take some time because Render's free web services can spin down when inactive.
 
