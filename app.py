@@ -10,16 +10,23 @@ from flask_login import (
 )
 from werkzeug.security import generate_password_hash, check_password_hash
 from datetime import date, datetime
+from sqlalchemy import func
 import os
 
 app = Flask(__name__)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///expenses.db'
+
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get(
+    "DATABASE_URL",
+    "sqlite:///expenses.db"
+)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
 app.config['SECRET_KEY'] = os.environ.get(
     "SECRET_KEY",
     "dev-only-change-this-local-key"
 )
+
 
 db = SQLAlchemy(app)
 login_manager = LoginManager()
@@ -169,6 +176,25 @@ def index():
     total =  round(sum(e.amount for e in expenses),2)
 
 
+    cat_q = db.session.query(
+    Expense.category,
+    func.sum(Expense.amount)).filter(Expense.user_id == current_user.id)
+
+    if start_date:
+        cat_q = cat_q.filter(Expense.date >= start_date)
+
+    if end_date:
+        cat_q = cat_q.filter(Expense.date <= end_date)
+
+    if selected_category:
+        cat_q = cat_q.filter(Expense.category == selected_category)
+
+    cat_rows = cat_q.group_by(Expense.category).all()
+
+    cat_labels = [c for c, _ in cat_rows]
+    cat_values = [round(float(s or 0), 2) for _, s in cat_rows]
+    
+
     return render_template(
         "index.html", 
         expenses=expenses,
@@ -178,6 +204,9 @@ def index():
         start_str=end_str,
         end_str=end_str,
         selected_category=selected_category,
+        cat_labels=cat_labels,
+        cat_values=cat_values,
+    
 
     )
 
