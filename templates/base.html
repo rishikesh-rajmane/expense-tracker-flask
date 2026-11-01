@@ -1,34 +1,94 @@
 
-<header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur">
-  <div class="mx-auto max-w-6xl px-4 py-4 flex items-center justify-between">
+<!DOCTYPE html>
+<html lang="en" class="h-full">
 
-    <!-- Logo -->
-    <a href="{{ url_for('index') if current_user.is_authenticated else url_for('login') }}"
-       class="text-xl font-bold tracking-tight">
-      <span class="text-brand">Expense</span> Tracker
-      <span class="text-slate-400">Lite</span>
-    </a>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- Navigation -->
-    {% if current_user.is_authenticated %}
-    <nav class="flex items-center gap-4">
+    <title>{% block title %}Expense Tracker Lite{% endblock %}</title>
 
-      {% if current_user.is_admin %}
-      <a href="{{ url_for('admin_users') }}"
-         class="text-sky-400 hover:text-sky-300 font-semibold text-sm">
-        Manage Users
-      </a>
-      {% endif %}
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
 
-      <form method="POST" action="{{ url_for('logout') }}">
-        <button type="submit"
-                class="rounded-lg bg-rose-600 hover:bg-rose-500 px-4 py-2 text-sm font-semibold">
-          Logout
-        </button>
-      </form>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: "#38bdf8"
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
 
-    </nav>
-    {% endif %}
+<body class="min-h-full bg-slate-900 text-slate-100">
 
-  </div>
-</header>
+    <!-- Header -->
+    <header class="border-b border-slate-800 bg-slate-900/60 backdrop-blur">
+        <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 flex items-center justify-between">
+
+            <!-- Logo -->
+            <a href="{{ url_for('index') if current_user.is_authenticated else url_for('login') }}"
+               class="text-xl font-bold tracking-tight">
+                <span class="text-brand">Expense</span> Tracker
+                <span class="text-slate-400">Lite</span>
+            </a>
+
+            <!-- Navigation -->
+            {% if current_user.is_authenticated %}
+            <nav class="flex items-center gap-4">
+
+                {% if current_user.is_admin %}
+                <a href="{{ url_for('admin_users') }}"
+                   class="text-sky-400 hover:text-sky-300 font-semibold text-sm">
+                    Manage Users
+                </a>
+                {% endif %}
+
+                <form method="POST" action="{{ url_for('logout') }}">
+                    <button type="submit"
+                            class="rounded-lg bg-rose-600 hover:bg-rose-500 px-4 py-2 text-sm font-semibold text-white">
+                        Logout
+                    </button>
+                </form>
+
+            </nav>
+            {% endif %}
+
+        </div>
+    </header>
+
+
+    <!-- Flash Messages -->
+    <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                <div class="mb-4 rounded-lg border border-slate-700 bg-slate-800 px-4 py-3 text-sm text-slate-200">
+                    {{ message }}
+                </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Page Content -->
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800 mt-10 py-5 text-center text-sm text-slate-500">
+        Expense Tracker Lite
+    </footer>
+
+</body>
+</html>
