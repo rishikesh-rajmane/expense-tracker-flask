@@ -3,64 +3,198 @@
 
 {% block content %}
 
-<h2>Admin - User Management</h2>
+<div class="mx-auto max-w-6xl px-4 py-8">
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>ID</th>
-            <th>Username</th>
-            <th>Role</th>
-            <th>Status</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
 
-    <tbody>
-        {% for user in users %}
-        <tr>
-            <td>{{ user.id }}</td>
-            <td>{{ user.username }}</td>
+        <div>
+            <h1 class="text-2xl font-bold text-white">
+                User Management
+            </h1>
 
-            <td>
-                {% if user.is_admin %}
-                    Admin
-                {% else %}
-                    User
-                {% endif %}
-            </td>
+            <p class="mt-1 text-sm text-slate-400">
+                Manage registered users, account status and passwords.
+            </p>
+        </div>
 
-            <td>
-                {% if user.is_active %}
-                    Active
-                {% else %}
-                    Inactive
-                {% endif %}
-            </td>
+        <a href="{{ url_for('index') }}"
+           class="inline-flex items-center justify-center rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-700 px-4 py-2 text-sm font-semibold text-white">
+            Back to Dashboard
+        </a>
 
-            <td>
-                <a href="{{ url_for('reset_user_password', user_id=user.id) }}">
-                    Reset Password
-                </a>
+    </div>
 
-                {% if user.id != current_user.id %}
-                <form method="POST"
-                      action="{{ url_for('toggle_user', user_id=user.id) }}"
-                      style="display:inline">
 
-                    <button type="submit">
-                        {% if user.is_active %}
-                            Deactivate
-                        {% else %}
-                            Activate
-                        {% endif %}
-                    </button>
-                </form>
-                {% endif %}
-            </td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <!-- User Count -->
+    <div class="mb-6 rounded-xl border border-slate-800 bg-slate-900 p-5">
+
+        <p class="text-sm text-slate-400">
+            Total Registered Users
+        </p>
+
+        <h2 class="mt-1 text-3xl font-bold text-sky-400">
+            {{ users|length }}
+        </h2>
+
+    </div>
+
+
+    <!-- Users Table -->
+    <section class="overflow-hidden rounded-2xl border border-slate-800 bg-slate-900">
+
+        <div class="border-b border-slate-800 px-5 py-4">
+
+            <h2 class="text-lg font-semibold text-white">
+                Registered Users
+            </h2>
+
+        </div>
+
+
+        <div class="overflow-x-auto">
+
+            <table class="w-full min-w-[750px] text-sm">
+
+                <thead class="bg-slate-800/70 text-slate-300">
+
+                    <tr>
+                        <th class="px-5 py-4 text-left">ID</th>
+                        <th class="px-5 py-4 text-left">Username</th>
+                        <th class="px-5 py-4 text-left">Role</th>
+                        <th class="px-5 py-4 text-left">Status</th>
+                        <th class="px-5 py-4 text-center">Actions</th>
+                    </tr>
+
+                </thead>
+
+
+                <tbody>
+
+                    {% for user in users %}
+
+                    <tr class="border-t border-slate-800 hover:bg-slate-800/40">
+
+                        <!-- ID -->
+                        <td class="px-5 py-4 text-slate-400">
+                            {{ user.id }}
+                        </td>
+
+
+                        <!-- Username -->
+                        <td class="px-5 py-4 font-medium text-white">
+                            {{ user.username }}
+                        </td>
+
+
+                        <!-- Role -->
+                        <td class="px-5 py-4">
+
+                            {% if user.is_admin %}
+
+                            <span class="rounded-full bg-purple-500/10 px-3 py-1 text-xs font-semibold text-purple-400">
+                                Admin
+                            </span>
+
+                            {% else %}
+
+                            <span class="rounded-full bg-sky-500/10 px-3 py-1 text-xs font-semibold text-sky-400">
+                                User
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Status -->
+                        <td class="px-5 py-4">
+
+                            {% if user.is_active %}
+
+                            <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-400">
+                                Active
+                            </span>
+
+                            {% else %}
+
+                            <span class="rounded-full bg-rose-500/10 px-3 py-1 text-xs font-semibold text-rose-400">
+                                Inactive
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+
+                        <!-- Actions -->
+                        <td class="px-5 py-4">
+
+                            <div class="flex items-center justify-center gap-3">
+
+                                <a href="{{ url_for('reset_user_password', user_id=user.id) }}"
+                                   class="rounded-lg border border-sky-500/30 bg-sky-500/10 px-3 py-2 text-xs font-semibold text-sky-400 hover:bg-sky-500/20">
+                                    Reset Password
+                                </a>
+
+
+                                {% if user.id != current_user.id %}
+
+                                <form method="POST"
+                                      action="{{ url_for('toggle_user', user_id=user.id) }}"
+                                      onsubmit="return confirm('Are you sure you want to change this user status?')">
+
+                                    {% if user.is_active %}
+
+                                    <button type="submit"
+                                            class="rounded-lg border border-rose-500/30 bg-rose-500/10 px-3 py-2 text-xs font-semibold text-rose-400 hover:bg-rose-500/20">
+                                        Deactivate
+                                    </button>
+
+                                    {% else %}
+
+                                    <button type="submit"
+                                            class="rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs font-semibold text-emerald-400 hover:bg-emerald-500/20">
+                                        Activate
+                                    </button>
+
+                                    {% endif %}
+
+                                </form>
+
+                                {% else %}
+
+                                <span class="text-xs text-slate-500">
+                                    Current Account
+                                </span>
+
+                                {% endif %}
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                    {% else %}
+
+                    <tr>
+                        <td colspan="5"
+                            class="px-5 py-10 text-center text-slate-400">
+                            No registered users found.
+                        </td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </section>
+
+</div>
 
 {% endblock %}
